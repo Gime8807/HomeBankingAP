@@ -17,7 +17,9 @@ public class Client {
     private String lastName;
     private String mail;
 
-    public Client(){}
+    public Client(){
+
+    }
 
     public Client(String firstName, String lastName, String mail){
         this.firstName= firstName;
@@ -28,7 +30,6 @@ public class Client {
     public Long getId() {
         return id;
     }
-
     public String getFirstName() {
         return firstName;
     }

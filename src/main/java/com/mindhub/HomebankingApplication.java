@@ -23,7 +23,7 @@ public class HomebankingApplication {
 
 			clientRepository.save(client1);
 
-			Account account1= new Account(client1, "565656", 5000.0);
+			Account account1= new Account(client1, "VIN001", 5000.0);
 			client1.addAccount(account1);
 
 			accountRepository.save(account1);

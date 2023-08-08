@@ -15,6 +15,7 @@ public class Client {
     private String firstName;
     private String lastName;
     private String mail;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
     private Set<Account> accounts = new HashSet<>();
 
@@ -37,6 +38,7 @@ public class Client {
     }
 
     public void addAccount(Account account){
+        account.setClient(this);
         this.accounts.add(account);
     }
 

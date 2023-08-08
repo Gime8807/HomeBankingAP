@@ -1,5 +1,6 @@
 package com.mindhub.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class Account {
 
     private Double balance;
 
+    public Account(){}
     public Account( Client client, String number, Double balance) {
         this.client = client;
         this.number = number;
@@ -35,7 +37,7 @@ public class Account {
     public Long getId() {
         return id;
     }
-
+    @JsonIgnore
     public Client getClient() {
         return client;
     }

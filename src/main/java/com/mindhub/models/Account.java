@@ -1,6 +1,5 @@
 package com.mindhub.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -25,7 +24,9 @@ public class Account {
 
     private Double balance;
 
-    public Account(){}
+    public Account(){
+
+    }
     public Account( Client client, String number, Double balance) {
         this.client = client;
         this.number = number;
@@ -37,33 +38,44 @@ public class Account {
     public Long getId() {
         return id;
     }
-    @JsonIgnore
+
     public Client getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
 
     public String getNumber() {
         return number;
+    }
+
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public LocalDateTime getLocalDateTime(LocalDate localDate) {
+        return localDateTime;
+    }
+
+    public void setClient(Client client) {
+
     }
 
     public void setNumber(String number) {
         this.number = number;
     }
 
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
-
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Double getBalance() {
-        return balance;
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
     }
 
     public void setBalance(Double balance) {

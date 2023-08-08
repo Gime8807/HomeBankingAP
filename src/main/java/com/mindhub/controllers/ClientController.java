@@ -1,12 +1,15 @@
 package com.mindhub.controllers;
 
+import com.mindhub.dtos.ClientDTO;
 import com.mindhub.models.Client;
 import com.mindhub.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -17,8 +20,17 @@ public class ClientController {
 
     //Servlet
     @RequestMapping("/clients")
-    public List<Client> getClients(){
-        return clientRepository.findAll();
+    public List<ClientDTO> getClients(){
+        List<Client> listClient = clientRepository.findAll();
+        List<ClientDTO> listClientDTO = listClient.stream()
+                .map(client -> new ClientDTO(client))
+                .collect(Collectors.toList());
+        return listClientDTO;
+    }
+
+    @RequestMapping("/clients/{id}")
+    public ClientDTO getClient (@PathVariable Long id){
+        return new ClientDTO(clientRepository.findById(id).orElse(null));
     }
 }
 

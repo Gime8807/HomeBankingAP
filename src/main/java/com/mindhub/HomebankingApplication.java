@@ -1,6 +1,8 @@
 package com.mindhub;
 
+import com.mindhub.models.Account;
 import com.mindhub.models.Client;
+import com.mindhub.repositories.AccountRepository;
 import com.mindhub.repositories.ClientRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,12 +17,18 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository){
 		return (args -> {
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
-			Client client2 = new Client("Patricia", "Sosa","patri_sosa@gmail.com");
+
 			clientRepository.save(client1);
-			clientRepository.save(client2);
+
+			Account account1= new Account(client1, "565656", 5000.0);
+			client1.addAccount(account1);
+
+			accountRepository.save(account1);
+
+
 
 		});
 	}

@@ -16,7 +16,6 @@ public class Transaction {
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
     private Account account;
-
     private TransactionType type;
 
     private Double amount;
@@ -26,7 +25,6 @@ public class Transaction {
     private LocalDateTime localDateTime;
 
 public Transaction(){
-
 }
 public Transaction(Double amount, String description, TransactionType type){
     this.amount= amount;

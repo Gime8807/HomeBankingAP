@@ -23,7 +23,7 @@ public class HomebankingApplication {
 
 	@Bean
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository){
-		return (args -> {
+		return args -> {
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
 
 			clientRepository.save(client1);
@@ -37,9 +37,9 @@ public class HomebankingApplication {
 			account2.setCreationDate(today.plusDays(1));
 			client1.addAccount(account2);
 
-			Transaction transaction1= new Transaction(+500.0, "transfer of mom", TransactionType.CREDITO);
-			Transaction transaction2= new Transaction(-250.25, "dinner mc donals", TransactionType.DEBITO);
-			Transaction transaction3= new Transaction(-360.5, "charge bus card", TransactionType.DEBITO);
+			Transaction transaction1= new Transaction(500.0, "transfer of mom", TransactionType.CREDIT);
+			Transaction transaction2= new Transaction(-250.25, "dinner mc donals", TransactionType.DEBIT);
+			Transaction transaction3= new Transaction(-360.5, "charge bus card", TransactionType.DEBIT);
 
 			accountRepository.save(account1);
 			accountRepository.save(account2);
@@ -52,8 +52,6 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction2);
 			transactionRepository.save(transaction3);
 
-
-
-		});
+		};
 	}
 }

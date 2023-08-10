@@ -2,8 +2,11 @@ package com.mindhub;
 
 import com.mindhub.models.Account;
 import com.mindhub.models.Client;
+import com.mindhub.models.Transaction;
+import com.mindhub.models.TransactionType;
 import com.mindhub.repositories.AccountRepository;
 import com.mindhub.repositories.ClientRepository;
+import com.mindhub.repositories.TransactionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,7 +22,7 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository){
 		return (args -> {
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
 
@@ -32,10 +35,22 @@ public class HomebankingApplication {
 
 			Account account2= new Account("VIN002",7500.0);
 			account2.setCreationDate(today.plusDays(1));
-			client1.addAccount((account2));
+			client1.addAccount(account2);
+
+			Transaction transaction1= new Transaction(+500.0, "transfer of mom", TransactionType.CREDITO);
+			Transaction transaction2= new Transaction(-250.25, "dinner mc donals", TransactionType.DEBITO);
+			Transaction transaction3= new Transaction(-360.5, "charge bus card", TransactionType.DEBITO);
 
 			accountRepository.save(account1);
 			accountRepository.save(account2);
+
+			account1.addTransaction(transaction1);
+			account1.addTransaction(transaction2);
+			account2.addTransaction(transaction3);
+
+			transactionRepository.save(transaction1);
+			transactionRepository.save(transaction2);
+			transactionRepository.save(transaction3);
 
 
 

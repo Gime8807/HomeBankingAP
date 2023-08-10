@@ -31,16 +31,13 @@ public Transaction(){
 public Transaction(Double amount, String description, TransactionType type){
     this.amount= amount;
     this.description= description;
-    this.type =type;
     this.localDateTime= LocalDateTime.now();
-
+    this.type= type;
 }
 
     public Long getId() {
         return id;
     }
-
-
 
     public Double getAmount() {
         return amount;
@@ -69,7 +66,6 @@ public Transaction(Double amount, String description, TransactionType type){
     public Account getAccount() {
         return account;
     }
-
     public void setAccount(Account account) {
         this.account = account;
     }

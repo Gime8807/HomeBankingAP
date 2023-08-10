@@ -14,14 +14,14 @@ public class TransactionDTO {
 
     private String description;
 
-    private LocalDateTime localDateTime;
+    private LocalDateTime date;
 
     public TransactionDTO (Transaction transaction){
         id= transaction.getId();
         type=transaction.getType();
         amount=transaction.getAmount();
         description= transaction.getDescription();
-        localDateTime=transaction.getLocalDateTime();
+        date=transaction.getLocalDateTime();
     }
 
     public Long getId() {
@@ -39,7 +39,7 @@ public class TransactionDTO {
         return description;
     }
 
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
+    public LocalDateTime getDate() {
+        return date;
     }
 }

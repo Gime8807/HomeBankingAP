@@ -6,6 +6,7 @@ import com.mindhub.models.Transaction;
 import com.mindhub.models.TransactionType;
 import com.mindhub.repositories.AccountRepository;
 import com.mindhub.repositories.ClientRepository;
+import com.mindhub.repositories.LoanRepository;
 import com.mindhub.repositories.TransactionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,7 +23,8 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository,
+	LoanRepository loanRepository){
 		return args -> {
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
 

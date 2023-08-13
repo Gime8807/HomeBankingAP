@@ -1,6 +1,7 @@
 package com.mindhub.controllers;
 
 import com.mindhub.dtos.ClientDTO;
+import com.mindhub.dtos.ClientLoanDTO;
 import com.mindhub.models.Client;
 import com.mindhub.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;

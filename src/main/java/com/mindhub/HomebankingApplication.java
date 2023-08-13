@@ -1,10 +1,7 @@
 package com.mindhub;
 
 import com.mindhub.models.*;
-import com.mindhub.repositories.AccountRepository;
-import com.mindhub.repositories.ClientRepository;
-import com.mindhub.repositories.LoanRepository;
-import com.mindhub.repositories.TransactionRepository;
+import com.mindhub.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,11 +19,13 @@ public class HomebankingApplication {
 
 	@Bean
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository,
-	LoanRepository loanRepository){
+									  LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
 		return args -> {
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
+			Client client2 = new Client("Gimena","Sasso","gimesasso@gmail.com");
 
 			clientRepository.save(client1);
+			clientRepository.save(client2);
 
 			Account account1= new Account("VIN001", 5000.0);
 			client1.addAccount(account1);
@@ -60,6 +59,27 @@ public class HomebankingApplication {
 			loanRepository.save(loan2);
 			loanRepository.save(loan3);
 
+			ClientLoan clientLoan1 = new ClientLoan("MORTGAGE LOAN",400000.0,60,client1,loan1);
+			ClientLoan clientLoan2 = new ClientLoan("PERSONAL LOAN",50000.0, 12,client1,loan2);
+			ClientLoan clientLoan3 = new ClientLoan("PERSONAL LOAN",100000.0,24,client2,loan2);
+			ClientLoan clientLoan4 = new ClientLoan("CARD LOAN",200000.0,36, client2,loan3);
+
+			client1.addClientLoan(clientLoan1);
+			loan1.addClientLoan(clientLoan1);
+
+			client1.addClientLoan(clientLoan2);
+			loan2.addClientLoan(clientLoan2);
+
+			client2.addClientLoan(clientLoan3);
+			loan2.addClientLoan(clientLoan3);
+
+			client2.addClientLoan(clientLoan4);
+			loan3.addClientLoan(clientLoan4);
+
+			clientLoanRepository.save(clientLoan1);
+			clientLoanRepository.save(clientLoan2);
+			clientLoanRepository.save(clientLoan3);
+			clientLoanRepository.save(clientLoan4);
 		};
 	}
 }

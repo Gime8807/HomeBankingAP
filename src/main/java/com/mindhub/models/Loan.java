@@ -1,5 +1,6 @@
 package com.mindhub.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Loan {
@@ -67,7 +69,11 @@ public class Loan {
         this.payments = payments;
     }
 
-    public Set<ClientLoan> getClients() {
-        return clients;
+    public void setClients(Set<ClientLoan> clients) {
+        this.clients = clients;
+    }
+
+    public List<Client> getClients(){
+        return clients.stream().map(clientLoan -> clientLoan.getClient()).collect(Collectors.toList());
     }
 }

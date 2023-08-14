@@ -49,5 +49,5 @@ public class ClientDTO {
         return accounts;
     }
 
-    public Set<ClientLoanDTO> getClientLoan() {return loans;}
+    public Set<ClientLoanDTO> getLoans() {return loans;}
 }

@@ -11,7 +11,7 @@ public class ClientLoanDTO {
 
     private Integer payments;
 
-    private Long idLoan;
+    private Long loanId;
 
 
     public ClientLoanDTO (ClientLoan clientLoan){
@@ -19,7 +19,7 @@ public class ClientLoanDTO {
         this.name= clientLoan.getLoan().getName();
         this.amount = clientLoan.getAmount();
         this.payments = clientLoan.getPayments();
-        this.idLoan = clientLoan.getLoan().getId();
+        this.loanId = clientLoan.getLoan().getId();
     }
 
     public Long getId() {
@@ -38,7 +38,7 @@ public class ClientLoanDTO {
         return name;
     }
 
-    public Long getIdLoan() {
-        return idLoan;
+    public Long getLoanId() {
+        return loanId;
     }
 }

@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 @Entity
 public class Loan {
+
+    //--Atributos--//
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native",strategy = "native")
@@ -20,29 +22,27 @@ public class Loan {
     private String name;
 
     private Double maxAmount;
-    @ElementCollection
-    private List<String> payments = new ArrayList<>();
 
+    @ElementCollection
+    private List<Integer> payments = new ArrayList<>();
+
+    //--Relaciones--//
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "loan")
     private Set<ClientLoan> clients = new HashSet<>();
 
-    public Loan(){
+    // -- Constructores--//
+    public Loan(){ }
 
-    }
-
-    public Loan (String name, Double maxAmount, List<String> payments){
+    public Loan (String name, Double maxAmount, List<Integer> payments){
         this.name= name;
         this.maxAmount= maxAmount;
         this.payments= payments;
     }
 
+    //--Getters y Setters--//
+
     public Long getId() {
         return id;
-    }
-
-    public void addClientLoan (ClientLoan clientLoan){
-        clientLoan.setLoan(this);
-        this.clients.add(clientLoan);
     }
 
     public String getName() {
@@ -61,16 +61,22 @@ public class Loan {
         this.maxAmount = maxAmount;
     }
 
-    public List<String> getPayments() {
+    public List<Integer> getPayments() {
         return payments;
     }
 
-    public void setPayments(List<String> payments) {
+    public void setPayments(List<Integer> payments) {
         this.payments = payments;
     }
 
     public void setClients(Set<ClientLoan> clients) {
         this.clients = clients;
+    }
+
+    //-- Metodos Accesores --//
+    public void addClientLoan (ClientLoan clientLoan){
+        clientLoan.setLoan(this);
+        clients.add(clientLoan);
     }
 
     public List<Client> getClients(){

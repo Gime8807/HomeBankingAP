@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 @Entity
 public class Client {
+
+    //-- Atributos--//
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native",strategy = "native")
@@ -19,21 +21,22 @@ public class Client {
     private String lastName;
     private String mail;
 
+    //--Relaciones--//
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
     private Set<Account> accounts = new HashSet<>();
 
     @OneToMany (fetch = FetchType.EAGER, mappedBy = "client")
     private Set<ClientLoan> loans = new HashSet<>();
 
-    public Client(){
-
-    }
+    //--Constructores--//
+    public Client(){ }
 
     public Client(String firstName, String lastName, String mail){
         this.firstName= firstName;
         this.lastName= lastName;
         this.mail= mail;
     }
+    //-- Getters y Setters--//
 
     public Long getId() {
         return id;
@@ -43,15 +46,7 @@ public class Client {
         return accounts;
     }
 
-    public void addAccount(Account account){
-        account.setClient(this);
-        this.accounts.add(account);
-    }
 
-    public void addClientLoan (ClientLoan clientLoan){
-        clientLoan.setClient(this);
-        this.loans.add(clientLoan);
-    }
     public String getFirstName() {
         return firstName;
     }
@@ -84,7 +79,18 @@ public class Client {
         this.loans = loans;
     }
 
+    //-- Metodos accesores--//
+    public void addAccount(Account account){
+        account.setClient(this);
+        this.accounts.add(account);
+    }
 
+    public void addClientLoan (ClientLoan clientLoan){
+        clientLoan.setClient(this);
+        loans.add(clientLoan);
+    }
+
+    @JsonIgnore
     public List<Loan> getLoans (){
         return loans.stream().map(clientLoan -> clientLoan.getLoan()).collect(Collectors.toList());
     }

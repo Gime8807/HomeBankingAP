@@ -12,8 +12,6 @@ public class ClientLoan {
     @GenericGenerator(name = "native",strategy = "native")
     private Long id;
 
-    private String name;
-
     private Double amount;
 
     private Integer payments;
@@ -28,29 +26,16 @@ public class ClientLoan {
 
     public ClientLoan(){
     }
-    public ClientLoan (String name, Double amount, Integer payments, Client client, Loan loan){
-        this.name =name;
+    public ClientLoan (Double amount, Integer payments, Client client, Loan loan){
         this.amount = amount;
         this.payments = payments;
         this.client = client;
         this.loan = loan;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() {return id;}
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
+    public Double getAmount() { return amount;}
 
     public void setAmount(Double amount) {
         this.amount = amount;
@@ -64,9 +49,7 @@ public class ClientLoan {
         this.payments = payments;
     }
 
-    public Client getClient() {
-        return client;
-    }
+    public Client getClient() { return client;}
 
     public void setClient(Client client) {
         this.client = client;

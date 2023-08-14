@@ -51,18 +51,18 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction2);
 			transactionRepository.save(transaction3);
 
-			Loan loan1 = new Loan("MORTGAGE LOAN",500000.0, List.of("12","24", "36","48","60"));
-			Loan loan2= new Loan("PERSONAL LOAN", 100000.0,List.of("6","12","24"));
-			Loan loan3= new Loan("CARD LOAN",300000.0,List.of("6","12","24","36"));
+			Loan loan1 = new Loan("MORTGAGE LOAN",500000.0, List.of(12,24, 36,48,60));
+			Loan loan2= new Loan("PERSONAL LOAN", 100000.0,List.of(6,12,24));
+			Loan loan3= new Loan("CARD LOAN",300000.0,List.of(6,12,24,36));
 
 			loanRepository.save(loan1);
 			loanRepository.save(loan2);
 			loanRepository.save(loan3);
 
-			ClientLoan clientLoan1 = new ClientLoan("MORTGAGE LOAN",400000.0,60,client1,loan1);
-			ClientLoan clientLoan2 = new ClientLoan("PERSONAL LOAN",50000.0, 12,client1,loan2);
-			ClientLoan clientLoan3 = new ClientLoan("PERSONAL LOAN",100000.0,24,client2,loan2);
-			ClientLoan clientLoan4 = new ClientLoan("CARD LOAN",200000.0,36, client2,loan3);
+			ClientLoan clientLoan1 = new ClientLoan(400000.0,60,client1,loan1);
+			ClientLoan clientLoan2 = new ClientLoan(50000.0, 12,client1,loan2);
+			ClientLoan clientLoan3 = new ClientLoan(100000.0,24,client2,loan2);
+			ClientLoan clientLoan4 = new ClientLoan(200000.0,36, client2,loan3);
 
 			client1.addClientLoan(clientLoan1);
 			loan1.addClientLoan(clientLoan1);

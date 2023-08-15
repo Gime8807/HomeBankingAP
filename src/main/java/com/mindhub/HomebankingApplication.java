@@ -21,11 +21,15 @@ public class HomebankingApplication {
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository,
 									  LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
 		return args -> {
+
+			//--CLIENTS--//
 			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com");
 			Client client2 = new Client("Gimena","Sasso","gimesasso@gmail.com");
 
 			clientRepository.save(client1);
 			clientRepository.save(client2);
+
+			//--ACCOUNTS--//
 
 			Account account1= new Account("VIN001", 5000.0);
 			client1.addAccount(account1);
@@ -35,13 +39,14 @@ public class HomebankingApplication {
 			Account account2= new Account("VIN002",7500.0);
 			account2.setCreationDate(today.plusDays(1));
 			client1.addAccount(account2);
+			accountRepository.save(account1);
+			accountRepository.save(account2);
+
+			//TRANSACTIONS--//
 
 			Transaction transaction1= new Transaction(500.0, "transfer of mom", TransactionType.CREDIT);
 			Transaction transaction2= new Transaction(-250.25, "dinner mc donals", TransactionType.DEBIT);
 			Transaction transaction3= new Transaction(-360.5, "charge bus card", TransactionType.DEBIT);
-
-			accountRepository.save(account1);
-			accountRepository.save(account2);
 
 			account1.addTransaction(transaction1);
 			account1.addTransaction(transaction2);
@@ -51,6 +56,7 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction2);
 			transactionRepository.save(transaction3);
 
+			//--LOANS--//
 			Loan loan1 = new Loan("MORTGAGE LOAN",500000.0, List.of(12,24, 36,48,60));
 			Loan loan2= new Loan("PERSONAL LOAN", 100000.0,List.of(6,12,24));
 			Loan loan3= new Loan("CARD LOAN",300000.0,List.of(6,12,24,36));

@@ -16,19 +16,20 @@ public class Account {
 
     private Long id;
 
+    private String number;
+
+    private LocalDate creationDate;
+
+    private Double balance;
+
+    //--Relaciones--//
     @ManyToOne(fetch = FetchType.EAGER)
     private Client client;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
     private Set<Transaction> transactions = new HashSet<>();
-    private String number;
 
-    private LocalDate creationDate;
-
-    private LocalDateTime localDateTime;
-
-    private Double balance;
-
+    //--Constructores--//
     public Account(){
 
     }
@@ -36,60 +37,48 @@ public class Account {
         this.number = number;
         this.balance = balance;
         this.creationDate = LocalDate.now();
-        this.localDateTime = LocalDateTime.now();
+
     }
 
-    public Set<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void addTransaction (Transaction transaction){
-        transaction.setAccount(this);
-        this.transactions.add(transaction);
-    }
+    //--Getters y Setters--//
 
     public Long getId() {
         return id;
-    }
-
-    public Client getClient() {
-        return client;
     }
 
     public String getNumber() {
         return number;
     }
 
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
+    public void setNumber(String number) { this.number = number;}
 
     public Double getBalance() {
         return balance;
-    }
-
-    public LocalDateTime getLocalDateTime(LocalDate localDate) {
-        return localDateTime;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public void setCreationDate(LocalDate creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
     }
 
     public void setBalance(Double balance) {
         this.balance = balance;
     }
 
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
 
+    public Client getClient() { return client; }
+
+    public void setClient(Client client) { this.client = client;}
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+
+    //--Metodos accesores--//
+    public void addTransaction (Transaction transaction){
+        transaction.setAccount(this);
+        this.transactions.add(transaction);
+    }
 }

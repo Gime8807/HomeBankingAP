@@ -14,8 +14,6 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Account account;
     private TransactionType type;
 
     private Double amount;
@@ -24,15 +22,21 @@ public class Transaction {
 
     private LocalDateTime localDateTime;
 
-public Transaction(){
-}
-public Transaction(Double amount, String description, TransactionType type){
+    //--Relaciones--//
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Account account;
+
+    //--Constructores--//
+    public Transaction(){
+    }
+    public Transaction(Double amount, String description, TransactionType type){
     this.amount= amount;
     this.description= description;
     this.localDateTime= LocalDateTime.now();
     this.type= type;
-}
+    }
 
+    //--Getters y Setters--//
     public Long getId() {
         return id;
     }

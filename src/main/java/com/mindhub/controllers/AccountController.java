@@ -22,11 +22,13 @@ public class AccountController {
     //Servlet
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts() {
-        List<Account> listAccount = accountRepository.findAll();
+        return accountRepository.findAll().stream().map(AccountDTO::new).collect(Collectors.toList());
+
+        /*List<Account> listAccount = accountRepository.findAll();
         List<AccountDTO> listAccountDTO = listAccount.stream()
                 .map(account -> new AccountDTO(account))
                 .collect(Collectors.toList());
-        return listAccountDTO;
+        return listAccountDTO;*/
     }
 
     @RequestMapping("/accounts/{id}")

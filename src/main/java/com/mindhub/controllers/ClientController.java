@@ -22,11 +22,12 @@ public class ClientController {
     //Servlet
     @RequestMapping("/clients")
     public List<ClientDTO> getClients(){
-        List<Client> listClient = clientRepository.findAll();
+        return clientRepository.findAll().stream().map(ClientDTO::new).collect(Collectors.toList());
+        /*List<Client> listClient = clientRepository.findAll();
         List<ClientDTO> listClientDTO = listClient.stream()
                 .map(client -> new ClientDTO(client))
                 .collect(Collectors.toList());
-        return listClientDTO;
+        return listClientDTO;*/
     }
 
     @RequestMapping("/clients/{id}")

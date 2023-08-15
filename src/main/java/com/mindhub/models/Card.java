@@ -28,7 +28,6 @@ public class Card {
 
     //--Relaciones--//
     @ManyToOne (fetch = FetchType.EAGER)
-    @JoinColumn(name = "card_id")
     private Client client;
 
    //--Constructores--//

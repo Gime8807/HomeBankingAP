@@ -28,9 +28,9 @@ public class Client {
     @OneToMany (fetch = FetchType.EAGER, mappedBy = "client")
     private Set<ClientLoan> loans = new HashSet<>();
 
-    @OneToMany (fetch = FetchType.EAGER, mappedBy = "card")
+    @OneToMany (fetch = FetchType.EAGER, mappedBy = "client")
     private Set<Card> cards = new HashSet<>();
-
+    //En la relacion, el mappedBy busca en el otro extremo de la misma si existe la propiedaad asociada//
 
     //--Constructores--//
     public Client(){ }

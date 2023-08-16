@@ -24,6 +24,7 @@ public class Account {
 
     //--Relaciones--//
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "account_id")
     private Client client;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")

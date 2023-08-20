@@ -19,7 +19,8 @@ public class Client {
     private Long id;
     private String firstName;
     private String lastName;
-    private String mail;
+    private String email;
+    private  String password;
 
     //--Relaciones--//
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "client")
@@ -35,10 +36,11 @@ public class Client {
     //--Constructores--//
     public Client(){ }
 
-    public Client(String firstName, String lastName, String mail){
+    public Client(String firstName, String lastName, String email, String password){
         this.firstName= firstName;
         this.lastName= lastName;
-        this.mail= mail;
+        this.email= email;
+        this.password = password;
     }
     //-- Getters y Setters--//
 
@@ -67,13 +69,13 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public String getMail() {
-        return mail;
-    }
+    public String getEmail() { return email;}
 
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
+    public void setEmail(String email) { this.email = email;}
+
+    public String getPassword() { return password;}
+
+    public void setPassword(String password) { this.password = password;}
 
     public Set<ClientLoan> getClientLoans() {
         return loans;

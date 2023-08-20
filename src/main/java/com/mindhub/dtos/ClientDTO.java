@@ -10,7 +10,7 @@ public class ClientDTO {
     private Long id;
     private String firstName;
     private String lastName;
-    private String mail;
+    private String email;
 
     private Set<AccountDTO> accounts;
 
@@ -22,7 +22,7 @@ public class ClientDTO {
         id = client.getId();
         firstName= client.getFirstName();
         lastName= client.getLastName();
-        mail= client.getMail();
+        email= client.getEmail();
         accounts= client.getAccounts().stream()
                 .map(element -> new AccountDTO(element))
                 .collect(Collectors.toSet());
@@ -46,8 +46,8 @@ public class ClientDTO {
         return lastName;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
     public Set<AccountDTO> getAccounts() {

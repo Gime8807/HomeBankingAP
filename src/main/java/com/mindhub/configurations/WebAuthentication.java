@@ -5,6 +5,7 @@ import com.mindhub.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -33,7 +34,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
 
             if (client != null) {
                 return new User(client.getEmail(), client.getPassword(),
-                        AuthorityUtils.createAuthorityList("USER"));
+                        AuthorityUtils.createAuthorityList("CLIENT"));
 
             } else {
                 throw new UsernameNotFoundException("Unknown user: "+ inputName);

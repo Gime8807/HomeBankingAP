@@ -32,19 +32,22 @@ public class HomebankingApplication {
 					passwordEncoder.encode("ads12345"));
 			Client client2 = new Client("Gimena","Sasso","gimesasso@gmail.com",
 					passwordEncoder.encode("bvc12345"));
+			Client client3 = new Client("pablo","mendez","pmendez@admin.com",
+					passwordEncoder.encode("12345"));
 
 			clientRepository.save(client1);
 			clientRepository.save(client2);
+			clientRepository.save(client3);
 
 			//--ACCOUNTS--//
 
-			Account account1= new Account("VIN001", 5000.0);
+			Account account1= new Account("VIN001", 5000.0,LocalDate.now());
 			client1.addAccount(account1);
 
-			LocalDate today= LocalDate.now();
 
-			Account account2= new Account("VIN002",7500.0);
-			account2.setCreationDate(today.plusDays(1));
+
+			Account account2= new Account("VIN002",7500.0, LocalDate.now());
+			account2.setCreationDate(LocalDate.now().plusDays(1));
 			client1.addAccount(account2);
 
 			//--TRANSACTIONS--//

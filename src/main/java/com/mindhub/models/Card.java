@@ -40,8 +40,8 @@ public class Card {
         this.color = color;
         this.number = number;
         this.cvv = cvv;
-        this.fromDate = LocalDate.now();
-        this.thruDate = LocalDate.now();
+        this.fromDate = fromDate;
+        this.thruDate = thruDate;
     }
 
     //--Getters y Setters--//

@@ -33,9 +33,7 @@ public class AccountDTO {
         return id;
     }
 
-    public String getNumber() {
-        return number;
-    }
+    public String getNumber() { return number; }
 
     public Double getBalance() {
         return balance;
@@ -48,4 +46,5 @@ public class AccountDTO {
     public Set<TransactionDTO> getTransactions() {
         return transactions;
     }
+
 }

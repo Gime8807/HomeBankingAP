@@ -1,18 +1,22 @@
 package com.mindhub.controllers;
 
 import com.mindhub.dtos.ClientDTO;
-import com.mindhub.dtos.ClientLoanDTO;
+import com.mindhub.models.Account;
 import com.mindhub.models.Client;
+import com.mindhub.repositories.AccountRepository;
+import com.mindhub.repositories.CardRepository;
 import com.mindhub.repositories.ClientRepository;
 
+import com.mindhub.utils.AccountUtils;
+import com.mindhub.utils.CardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +28,11 @@ public class ClientController {
     private ClientRepository clientRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private CardRepository cardRepository;
 
     //Servlet
     @RequestMapping("/clients")
@@ -36,7 +45,7 @@ public class ClientController {
         return listClientDTO;*/
     }
 
-    @RequestMapping("/clients/{id}")
+    @GetMapping("/clients/{id}")
     public ClientDTO getClient (@PathVariable Long id){
         return new ClientDTO(clientRepository.findById(id).orElse(null));
     }
@@ -53,7 +62,7 @@ public class ClientController {
             @RequestParam String firstName, @RequestParam String lastName,
             @RequestParam String email, @RequestParam String password) {
 
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || password.isBlank()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
 
@@ -61,7 +70,25 @@ public class ClientController {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
 
-        clientRepository.save(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
+        Account account = null;
+        do {
+
+            String number = "VIN" + AccountUtils.getRandomNumberAccount(100000000,1000000);
+            account= new Account(number,0.0,LocalDate.now());
+        }
+        while(accountRepository.existsByNumber(account.getNumber()));
+
+        String numberCard = CardUtils.getRandomNumberCard();
+
+        Integer cvv = CardUtils.getRandomNumberCvv(0,999);
+
+        Client clientRegistered = new Client(firstName, lastName, email, passwordEncoder.encode(password));
+        clientRegistered.addAccount(account);
+
+        clientRepository.save(clientRegistered);
+        accountRepository.save(account);
+
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

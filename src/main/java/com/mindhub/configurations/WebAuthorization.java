@@ -23,12 +23,13 @@ public class WebAuthorization  {
     public SecurityFilterChain filterChain (HttpSecurity http) throws Exception{
 
         http.authorizeRequests()
-                .antMatchers("/web/index.html", "/web/js/**","/web/css/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/api/**").hasAuthority("CLIENT")
-                .antMatchers(HttpMethod.GET,"/api/clients/current", "/web/**").hasAuthority("CLIENT");
+                .antMatchers("/web/index.html", "/web/js/**","/web/css/**","/web/img/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/login","/api/logout","/api/clients").permitAll()
+                .antMatchers("/h2-console/**","/rest/**", "/api/clients").hasAuthority("ADMIN")
+                .antMatchers("/api/**","/api/clients/{id}").hasAuthority("CLIENT")
+                .antMatchers("/api/clients/current", "/web/**","/api/clients/**").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST, "/clients/current/accounts/**","/clients/current/cards").hasAuthority("CLIENT")
+                .anyRequest().denyAll();
 
 
         http.formLogin()

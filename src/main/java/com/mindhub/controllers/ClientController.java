@@ -55,7 +55,6 @@ public class ClientController {
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
     }
 
-
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
 
     public ResponseEntity<Object> register(

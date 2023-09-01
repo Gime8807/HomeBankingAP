@@ -1,6 +1,7 @@
 package com.mindhub.controllers;
 
 import com.mindhub.dtos.AccountDTO;
+import com.mindhub.dtos.ClientDTO;
 import com.mindhub.models.Account;
 import com.mindhub.models.Client;
 import com.mindhub.repositories.AccountRepository;
@@ -46,6 +47,12 @@ public class AccountController {
         return  new AccountDTO(accountRepository.findById(id).orElse(null));
     }
 
+    @RequestMapping ("/clients/current/accounts")
+    public List<AccountDTO> getCurrentAccount (Authentication authentication){
+        return accountRepository.findAll().stream()
+                .filter(account -> account.getClient().getEmail().equals(authentication.getName()))
+                .map(AccountDTO::new).collect(Collectors.toList());
+    }
 
 
     @RequestMapping(value = "/clients/current/accounts", method = RequestMethod.POST)

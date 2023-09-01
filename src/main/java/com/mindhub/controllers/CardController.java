@@ -47,10 +47,10 @@ public class CardController {
         Client clientAuth = clientRepository.findByEmail(authentication.getName());
 
         List<Card> cardFiltered = clientAuth.getCards().stream()
-                .filter(card -> card.getType() == cardType).collect(Collectors.toList());
+                .filter(card -> card.getType() == cardType && card.getColor() == cardColor).collect(Collectors.toList());
 
-       if (cardFiltered.stream().count() ==3){
-           return new ResponseEntity<>("Already max number of Card" + cardType, HttpStatus.FORBIDDEN);
+       if ((long) cardFiltered.size() ==1){
+           return new ResponseEntity<>("Already this type of Card", HttpStatus.FORBIDDEN);
        }
 
        String numberCard;

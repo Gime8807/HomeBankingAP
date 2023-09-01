@@ -89,15 +89,16 @@ public class TransactionController {
 
         //Creacion de tipos de transacciones
 
-        Transaction transactionDebit = new Transaction(-amount, description + "DEBIT - " + fromAccountNumber,
+        //Debit Transaction
+        Transaction transactionDebit = new Transaction(-amount, description + " DEBIT - " + fromAccountNumber,
                 TransactionType.DEBIT, LocalDateTime.now());
         accountSource.addTransaction(transactionDebit);
         accountSource.setBalance(accountSource.getBalance() - amount);
         transactionRepository.save(transactionDebit);
         accountRepository.save(accountSource);
 
-
-        Transaction transactionCredit = new Transaction(amount, description + "CREDIT " + toAccountNumber,
+        // Credit Transaction
+        Transaction transactionCredit = new Transaction(amount, description + " CREDIT " + toAccountNumber,
                 TransactionType.CREDIT,LocalDateTime.now());
        accountDestination.setBalance(accountDestination.getBalance() + amount);
         accountDestination.addTransaction(transactionCredit);

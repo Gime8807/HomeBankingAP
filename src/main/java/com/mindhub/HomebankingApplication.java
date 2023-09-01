@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootApplication
@@ -52,9 +53,9 @@ public class HomebankingApplication {
 
 			//--TRANSACTIONS--//
 
-			Transaction transaction1= new Transaction(500.0, "transfer of mom", TransactionType.CREDIT);
-			Transaction transaction2= new Transaction(-250.25, "dinner mc donals", TransactionType.DEBIT);
-			Transaction transaction3= new Transaction(-360.5, "charge bus card", TransactionType.DEBIT);
+			Transaction transaction1= new Transaction(500.0, "transfer of mom", TransactionType.CREDIT,LocalDateTime.now());
+			Transaction transaction2= new Transaction(-250.25, "dinner mc donals", TransactionType.DEBIT,LocalDateTime.now());
+			Transaction transaction3= new Transaction(-360.5, "charge bus card", TransactionType.DEBIT,LocalDateTime.now());
 
 			accountRepository.save(account1);
 			accountRepository.save(account2);

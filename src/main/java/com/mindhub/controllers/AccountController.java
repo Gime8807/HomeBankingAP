@@ -49,8 +49,8 @@ public class AccountController {
 
     @RequestMapping ("/clients/current/accounts")
     public List<AccountDTO> getCurrentAccount (Authentication authentication){
-        return accountRepository.findAll().stream()
-                .filter(account -> account.getClient().getEmail().equals(authentication.getName()))
+        return clientRepository.findByEmail(authentication.getName())
+                .getAccounts().stream()
                 .map(AccountDTO::new).collect(Collectors.toList());
     }
 

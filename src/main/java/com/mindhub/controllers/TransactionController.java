@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,57 +41,59 @@ public class TransactionController {
     @Transactional
     @RequestMapping (value = "/transactions",method = RequestMethod.POST)
     public ResponseEntity<Object> createdTransaction (
-            @RequestParam (defaultValue = "0") Double amount, @RequestParam String description,
-            @RequestParam String numberAccountOrigin,@RequestParam String numberAccountDestination,
+            @RequestParam Double amount, @RequestParam String description,
+            @RequestParam String fromAccountNumber ,@RequestParam String toAccountNumber,
                                                Authentication authentication) {
 
         Client clientAuth = clientRepository.findByEmail(authentication.getName());
-        Account accountAuthOrigin = accountRepository.findByNumber(numberAccountOrigin);
-        Account accountAuthDestination = accountRepository.findByNumber(numberAccountDestination);
+        Account fromAccountAuth = accountRepository.findByNumber(fromAccountNumber);
+        Account toAccountAuth = accountRepository.findByNumber(toAccountNumber);
 
         //Verificar que los parámetros no estén vacíos
 
-        if (amount <= 0.0 || description.isBlank() || numberAccountOrigin.isBlank() || numberAccountDestination.isBlank()) {
-            return new ResponseEntity<>("Missing Data", HttpStatus.FORBIDDEN);
+        if (amount.isNaN() || description.isBlank() || fromAccountNumber.isBlank() || toAccountNumber.isBlank()) {
+            return new ResponseEntity<>("Missing Data", HttpStatus.BAD_REQUEST);
         }
         // Verificar que los números de cuenta no sean iguales
-        if (accountAuthOrigin==accountAuthDestination) {
+        if (fromAccountNumber.equals(toAccountNumber)) {
             return new ResponseEntity<>("You are not allowed to perform this operation", HttpStatus.FORBIDDEN);
         }
         //Verificar que exista la cuenta de origen
-        if (!accountRepository.existsByNumber(numberAccountOrigin)) {
+        if (!accountRepository.existsByNumber(fromAccountNumber)) {
             return new ResponseEntity<>("Account origin don't exists", HttpStatus.FORBIDDEN);
         }
         //Verificar que la cuenta de origen pertenezca al cliente autenticado
-        if (!clientAuth.getAccounts().contains(accountAuthOrigin)) {
+        if (!clientAuth.getAccounts().equals(fromAccountAuth)) {
             return new ResponseEntity<>(" ", HttpStatus.FORBIDDEN);
         }
         //Verificar que exista la cuenta de destino
-        if (!accountRepository.existsByNumber(numberAccountDestination)) {
+        if (!accountRepository.existsByNumber(toAccountNumber)) {
             return new ResponseEntity<>("Account destination don't exists", HttpStatus.FORBIDDEN);
         }
         //Verificar que la cuenta de origen tenga el monto disponible.
-        if (accountAuthOrigin.getBalance() < amount) {
+        if (fromAccountAuth.getBalance() < amount) {
             return new ResponseEntity<>("Insufficient funds", HttpStatus.FORBIDDEN);
         }
 
         //Creacion de tipos de transacciones
 
-        Transaction transactionDebit = new Transaction(amount, description, TransactionType.DEBIT);
-        Transaction transactionCredit = new Transaction(amount, description, TransactionType.CREDIT);
+        Transaction transactionDebit = new Transaction(-amount, description + "DEBIT - " + fromAccountNumber,
+                TransactionType.DEBIT, LocalDateTime.now());
+        Transaction transactionCredit = new Transaction(amount, description + "CREDIT " + toAccountNumber,
+                TransactionType.CREDIT,LocalDateTime.now());
 
         //Seteamos los balances de ambas transacciones
-        accountAuthOrigin.setBalance(accountAuthOrigin.getBalance() - amount);
-        accountAuthDestination.setBalance(accountAuthDestination.getBalance() + amount);
+        fromAccountAuth.setBalance(fromAccountAuth.getBalance() - amount);
+        toAccountAuth.setBalance(toAccountAuth.getBalance() + amount);
+
+        fromAccountAuth.addTransaction(transactionDebit);
+        toAccountAuth.addTransaction(transactionCredit);
 
         transactionRepository.save(transactionDebit);
         transactionRepository.save(transactionCredit);
 
-        accountAuthOrigin.addTransaction(transactionDebit);
-        accountAuthDestination.addTransaction(transactionCredit);
-
-        accountRepository.save(accountAuthOrigin);
-        accountRepository.save(accountAuthDestination);
+        accountRepository.save(fromAccountAuth);
+        accountRepository.save(toAccountAuth);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

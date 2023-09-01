@@ -18,7 +18,7 @@ public class Transaction {
 
     private String description;
 
-    private LocalDateTime localDateTime;
+    private LocalDateTime date;
     private TransactionType type;
 
     //--Relaciones--//
@@ -28,10 +28,10 @@ public class Transaction {
     //--Constructores--//
     public Transaction(){
     }
-    public Transaction(Double amount, String description, TransactionType type){
+    public Transaction(Double amount, String description, TransactionType type,LocalDateTime date){
     this.amount= amount;
     this.description= description;
-    this.localDateTime= LocalDateTime.now();
+    this.date= date;
     this.type= type;
     }
 
@@ -57,11 +57,11 @@ public class Transaction {
     }
 
     public LocalDateTime getLocalDateTime() {
-        return localDateTime;
+        return date;
     }
 
     public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
+        this.date = localDateTime;
     }
 
     public Account getAccount() {

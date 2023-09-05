@@ -7,6 +7,7 @@ import com.mindhub.repositories.AccountRepository;
 import com.mindhub.repositories.CardRepository;
 import com.mindhub.repositories.ClientRepository;
 
+import com.mindhub.services.ClientService;
 import com.mindhub.utils.AccountUtils;
 import com.mindhub.utils.CardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,20 @@ public class ClientController {
     @Autowired
     private CardRepository cardRepository;
 
+    @Autowired
+    ClientService clientService;
+
     //Servlet
     @RequestMapping("/clients")
     public List<ClientDTO> getClients(){
-        return clientRepository.findAll().stream().map(ClientDTO::new).collect(Collectors.toList());
-        /*List<Client> listClient = clientRepository.findAll();
+        return clientService.getClients();
+
+        /*
+        metodo resumido:
+        clientRepository.findAll().stream().map(ClientDTO::new).collect(Collectors.toList());
+
+        metodo desarrollado:
+        List<Client> listClient = clientRepository.findAll();
         List<ClientDTO> listClientDTO = listClient.stream()
                 .map(client -> new ClientDTO(client))
                 .collect(Collectors.toList());
@@ -47,12 +57,12 @@ public class ClientController {
 
     @GetMapping("/clients/{id}")
     public ClientDTO getClient (@PathVariable Long id){
-        return new ClientDTO(clientRepository.findById(id).orElse(null));
+        return clientService.getClientById(id);
     }
 
     @RequestMapping(value = "/clients/current", method = RequestMethod.GET)
     public ClientDTO getCurrent ( Authentication authentication){
-        return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
+        return clientService.getCurrent(authentication.getName());
     }
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
@@ -84,7 +94,7 @@ public class ClientController {
         Client clientRegistered = new Client(firstName, lastName, email, passwordEncoder.encode(password));
         clientRegistered.addAccount(account);
 
-        clientRepository.save(clientRegistered);
+        clientService.saveClient(clientRegistered);
         accountRepository.save(account);
 
 

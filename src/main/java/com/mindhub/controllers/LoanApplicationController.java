@@ -75,17 +75,19 @@ public class LoanApplicationController {
             return new ResponseEntity<>("This amount is ",HttpStatus.FORBIDDEN);
         }
         //Verifica que la cantidad de cuotas se encuentre entre las disponibles del préstamo
-
+        if(loan.getPayments().equals(loanApplicationDTO.getPayments())){
+            return new ResponseEntity<>("This numbers of payments is not available",HttpStatus.FORBIDDEN);
+        }
 
         //Verificar que la cuenta de destino exista
         if(!accountRepository.existsByNumber(toAccountNumber)){
             return new ResponseEntity<>("This destination account don't exists", HttpStatus.FORBIDDEN);
         }
         //Verificar que la cuenta de destino pertenezca al cliente autenticado
-       /* if(!clientAuth.getAccounts().contains(toAccountNumber)){
+        if(!clientAuth.getAccounts().contains(accountDestination)){
             System.out.println(clientAuth.getAccounts());
             return new ResponseEntity<>("This Account don't belong to authentication client ",HttpStatus.FORBIDDEN);
-        }*/
+        }
 
         ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount()*0.2, loanApplicationDTO.getPayments());
         Transaction transactionLoan = new Transaction(amount,  "Loan approved " + toAccountNumber,

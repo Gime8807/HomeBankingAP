@@ -1,6 +1,8 @@
 package com.mindhub.dtos;
 
 import com.mindhub.models.ClientLoan;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
 
 public class ClientLoanDTO {
     private Long id;

@@ -6,6 +6,9 @@ import com.mindhub.models.*;
 import com.mindhub.repositories.AccountRepository;
 import com.mindhub.repositories.ClientRepository;
 import com.mindhub.repositories.TransactionRepository;
+import com.mindhub.services.AccountService;
+import com.mindhub.services.ClientService;
+import com.mindhub.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +24,21 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class TransactionController {
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionService transactionService;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
 
     @RequestMapping("/transactions")
     public List<TransactionDTO> getTransactions(){
-        return transactionRepository.findAll().stream().map(TransactionDTO::new).collect(Collectors.toList());
+        return transactionService.getTransactions();
     }
     @RequestMapping("/transactions/{id}")
     public TransactionDTO getTransactions (@PathVariable Long id){
-        return new TransactionDTO(transactionRepository.findById(id).orElse(null));
+        return new TransactionDTO(transactionService.getTransactionById(id));
     }
 
     @Transactional
@@ -45,9 +48,9 @@ public class TransactionController {
             @RequestParam String fromAccountNumber ,@RequestParam String toAccountNumber,
                                                Authentication authentication) {
 
-        Client clientAuth = clientRepository.findByEmail(authentication.getName());
-        Account accountSource = accountRepository.findByNumber(fromAccountNumber);
-        Account accountDestination = accountRepository.findByNumber(toAccountNumber);
+        Client clientAuth = clientService.getCurrentClient(authentication.getName());
+        Account accountSource = accountService.findByNumber(fromAccountNumber);
+        Account accountDestination = accountService.findByNumber(toAccountNumber);
 
         //Verificar que los parámetros no estén vacíos
         if (amount == null) {
@@ -69,7 +72,7 @@ public class TransactionController {
         }
         //Verificar que exista la cuenta de origen
 
-        if (!accountRepository.existsByNumber(fromAccountNumber)) {
+        if (!accountService.existsByNumber(fromAccountNumber)) {
             return new ResponseEntity<>("Source account don't exists", HttpStatus.FORBIDDEN);
         }
         //Verificar que la cuenta de origen pertenezca al cliente autenticado
@@ -78,7 +81,7 @@ public class TransactionController {
         }
 
         //Verificar que exista la cuenta de destino
-        if (!accountRepository.existsByNumber(toAccountNumber)) {
+        if (!accountService.existsByNumber(toAccountNumber)) {
             return new ResponseEntity<>("Account destination don't exists", HttpStatus.FORBIDDEN);
         }
 
@@ -94,16 +97,16 @@ public class TransactionController {
                 TransactionType.DEBIT, LocalDateTime.now());
         accountSource.addTransaction(transactionDebit);
         accountSource.setBalance(accountSource.getBalance() - amount);
-        transactionRepository.save(transactionDebit);
-        accountRepository.save(accountSource);
+        transactionService.createdTransaction(transactionDebit);
+        accountService.createdAccount(accountSource);
 
         // Credit Transaction
         Transaction transactionCredit = new Transaction(amount, description + " CREDIT " + toAccountNumber,
                 TransactionType.CREDIT,LocalDateTime.now());
        accountDestination.setBalance(accountDestination.getBalance() + amount);
         accountDestination.addTransaction(transactionCredit);
-        transactionRepository.save(transactionCredit);
-        accountRepository.save(accountDestination);
+        transactionService.createdTransaction(transactionCredit);
+        accountService.createdAccount(accountDestination);
 
 
         return new ResponseEntity<>(HttpStatus.CREATED);

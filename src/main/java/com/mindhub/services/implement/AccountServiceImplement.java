@@ -31,8 +31,18 @@ public class AccountServiceImplement implements AccountService {
     }
 
     @Override
-    public AccountDTO getAccountById(Long id) {
-        return new AccountDTO(accountRepository.findById(id).orElse(null));
+    public Account getAccountById(Long id) {
+        return accountRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Account findByNumber(String number) {
+        return accountRepository.findByNumber(number);
+    }
+
+    @Override
+    public boolean existsByNumber(String number) {
+        return accountRepository.existsByNumber(number);
     }
 
 
@@ -43,17 +53,7 @@ public class AccountServiceImplement implements AccountService {
     }
 
     @Override
-    public void createdAccount(Authentication authentication) {
-
-        Client clientAuth =  clientRepository.findByEmail(authentication.getName());
-        Account account = null;
-        do {
-            String number = "VIN" + getRandomNumberAccount(10000000,99999999);
-            account= new Account(number,0.0, LocalDate.now());
-        }
-        while(accountRepository.existsByNumber(account.getNumber()));
-
-        clientAuth.addAccount(account);
+    public void createdAccount(Account account) {
         accountRepository.save(account);
     }
 

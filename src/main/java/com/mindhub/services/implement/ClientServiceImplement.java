@@ -30,13 +30,13 @@ public class ClientServiceImplement implements ClientService {
     }
 
     @Override
-    public ClientDTO getClientById(Long id) {
-        return new ClientDTO(clientRepository.findById(id).orElse(null));
+    public Client getClientById(Long id) {
+        return clientRepository.findById(id).orElse(null);
     }
 
     @Override
-    public ClientDTO getCurrentClient (String email) {
-        return new ClientDTO(clientRepository.findByEmail(email));
+    public Client getCurrentClient (String email) {
+        return clientRepository.findByEmail(email);
     }
 
     @Override

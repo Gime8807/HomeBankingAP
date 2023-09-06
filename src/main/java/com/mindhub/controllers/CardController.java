@@ -1,14 +1,18 @@
 package com.mindhub.controllers;
 
 import com.mindhub.dtos.CardDTO;
+import com.mindhub.dtos.ClientDTO;
 import com.mindhub.models.Card;
 import com.mindhub.models.CardColor;
 import com.mindhub.models.CardType;
 import com.mindhub.models.Client;
 import com.mindhub.repositories.CardRepository;
 import com.mindhub.repositories.ClientRepository;
+import com.mindhub.services.CardService;
+import com.mindhub.services.ClientService;
 import com.mindhub.utils.CardUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -25,56 +29,42 @@ import static com.mindhub.utils.CardUtils.getRandomNumberCvv;
 @RequestMapping ("/api")
 public class CardController {
     @Autowired
-    private CardRepository cardRepository;
+    private CardService cardService;
 
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
 
     @RequestMapping("/cards")
     public List<CardDTO> getCards(){
-        return cardRepository.findAll().stream().map(CardDTO::new).collect(Collectors.toList());
-    }
-    @RequestMapping("/cards/{id}")
-    public CardDTO getCard (@PathVariable Long id){
-        return new CardDTO(cardRepository.findById(id).orElse(null));
+        return cardService.getCards();
     }
 
     @RequestMapping (value = "/clients/current/cards",method = RequestMethod.POST)
     public  ResponseEntity<Object> createdCard (@RequestParam CardType cardType,@RequestParam CardColor cardColor,
     Authentication authentication){
-
-        Client clientAuth = clientRepository.findByEmail(authentication.getName());
-
-        List<Card> cardFiltered = clientAuth.getCards().stream()
-                .filter(card -> card.getType() == cardType && card.getColor() == cardColor).collect(Collectors.toList());
+        Client client = clientService.getCurrentClient(authentication.getName());
+        List<Card> cardFiltered = client.getCards().stream().filter
+                (card -> card.getType() == cardType && card.getColor() == cardColor).collect(Collectors.toList());
 
        if ((long) cardFiltered.size() ==1){
            return new ResponseEntity<>("Already this type of Card", HttpStatus.FORBIDDEN);
        }
 
-       String numberCard;
+        String numberCard;
 
-       Integer cvv = getRandomNumberCvv(0,999);
+        Integer cvv = getRandomNumberCvv(0,999);
 
-       do{
-           numberCard = getRandomNumberCard();
-       }
-       while (cardRepository.existsByNumber(numberCard));
+        do{
+            numberCard = getRandomNumberCard();
+        }
+        while (cardService.exitsCardByNumber(numberCard));
 
-       Card newCard = new Card(clientAuth.getFirstName() + " "+ clientAuth.getLastName(),
-               cardType, cardColor, numberCard,cvv,LocalDate.now(),LocalDate.now().plusYears(5));
-       clientAuth.addCard(newCard);
-       cardRepository.save(newCard);
+        Card newCard = new Card(client.getFirstName() + " "+ client.getLastName(),
+                cardType, cardColor, numberCard,cvv, LocalDate.now(),LocalDate.now().plusYears(5));
+        client.addCard(newCard);
+        cardService.createdCard(newCard);
+
        return new ResponseEntity<> (HttpStatus.CREATED);
     }
-    /*Account account = null;
-        do {
-        String number = "VIN" + AccountUtils.getRandomNumberAccount(100000000,1000000);
-        account= new Account(number,0.0,LocalDate.now());
-    }
-        while(accountRepository.existsByNumber(account.getNumber()));
-
-        clientAuth.addAccount(account);
-        accountRepository.save(account);*/
 }

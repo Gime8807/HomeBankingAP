@@ -10,11 +10,15 @@ public interface AccountService {
 
     List<AccountDTO> getAccounts();
 
-    AccountDTO getAccountById (Long id);
+    Account getAccountById (Long id);
+
+    Account findByNumber (String number);
+
+    boolean existsByNumber (String number);
 
     List<AccountDTO> getCurrentAccount (Authentication authentication);
 
-    void createdAccount (Authentication authentication);
+    void createdAccount (Account account);
 
 
 }

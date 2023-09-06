@@ -48,7 +48,7 @@ public class AccountController {
 
     @RequestMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable Long id){
-        return  accountService.getAccountById(id);
+        return  new AccountDTO(accountService.getAccountById(id));
     }
 
     @RequestMapping ("/clients/current/accounts")
@@ -65,7 +65,16 @@ public class AccountController {
             System.out.println("tiene 3 cuentas, alcanzo el maximo");
             return new ResponseEntity<>("Already max number accounts", HttpStatus.FORBIDDEN);
         }
-        accountService.createdAccount(authentication);
+        Client clientAuth =  clientService.getCurrentClient(authentication.getName());
+        Account account = null;
+        do {
+            String number = "VIN" + getRandomNumberAccount(10000000,99999999);
+            account= new Account(number,0.0, LocalDate.now());
+        }
+        while(accountService.existsByNumber(account.getNumber()));
+
+        clientAuth.addAccount(account);
+        accountService.createdAccount(account);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

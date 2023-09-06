@@ -54,12 +54,12 @@ public class ClientController {
 
     @GetMapping("/clients/{id}")
     public ClientDTO getClient (@PathVariable Long id){
-        return clientService.getClientById(id);
+        return new ClientDTO(clientService.getClientById(id));
     }
 
     @RequestMapping(value = "/clients/current", method = RequestMethod.GET)
     public ClientDTO getCurrent ( Authentication authentication){
-        return clientService.getCurrentClient(authentication.getName());
+        return new ClientDTO(clientService.getCurrentClient(authentication.getName()));
     }
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)

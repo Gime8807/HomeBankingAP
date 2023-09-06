@@ -89,7 +89,7 @@ public class LoanApplicationController {
             return new ResponseEntity<>("This Account don't belong to authentication client ",HttpStatus.FORBIDDEN);
         }
 
-        ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount()*0.2, loanApplicationDTO.getPayments());
+        ClientLoan clientLoan = new ClientLoan(loanApplicationDTO.getAmount()+ amount*0.2, loanApplicationDTO.getPayments());
         Transaction transactionLoan = new Transaction(amount,  "Loan approved " + toAccountNumber,
                 TransactionType.CREDIT, LocalDateTime.now());
         accountDestination.setBalance(accountDestination.getBalance() + amount);

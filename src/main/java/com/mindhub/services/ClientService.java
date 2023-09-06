@@ -10,7 +10,7 @@ public interface ClientService {
 
     ClientDTO getClientById ( Long id);
 
-    ClientDTO getCurrent (String email);
+    ClientDTO getCurrentClient (String email);
 
     void saveClient (Client client);
 }

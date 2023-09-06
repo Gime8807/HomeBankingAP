@@ -7,6 +7,7 @@ import com.mindhub.repositories.AccountRepository;
 import com.mindhub.repositories.CardRepository;
 import com.mindhub.repositories.ClientRepository;
 
+import com.mindhub.services.AccountService;
 import com.mindhub.services.ClientService;
 import com.mindhub.utils.AccountUtils;
 import com.mindhub.utils.CardUtils;
@@ -25,25 +26,21 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class ClientController {
-    @Autowired
-    private ClientRepository clientRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
 
     @Autowired
-    private CardRepository cardRepository;
-
-    @Autowired
-    ClientService clientService;
+    private ClientService clientService;
 
     //Servlet
     @RequestMapping("/clients")
     public List<ClientDTO> getClients(){
         return clientService.getClients();
 
-        /*
+        /* Antes de aplicar los servicios
         metodo resumido:
         clientRepository.findAll().stream().map(ClientDTO::new).collect(Collectors.toList());
 
@@ -62,7 +59,7 @@ public class ClientController {
 
     @RequestMapping(value = "/clients/current", method = RequestMethod.GET)
     public ClientDTO getCurrent ( Authentication authentication){
-        return clientService.getCurrent(authentication.getName());
+        return clientService.getCurrentClient(authentication.getName());
     }
 
     @RequestMapping(path = "/clients", method = RequestMethod.POST)
@@ -75,28 +72,11 @@ public class ClientController {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
 
-        if (clientRepository.findByEmail(email) !=  null) {
+        if (clientService.getCurrentClient(email) !=  null) {
             return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
         }
 
-        Account account = null;
-        do {
-
-            String number = "VIN" + AccountUtils.getRandomNumberAccount(100000000,1000000);
-            account= new Account(number,0.0,LocalDate.now());
-        }
-        while(accountRepository.existsByNumber(account.getNumber()));
-
-        String numberCard = CardUtils.getRandomNumberCard();
-
-        Integer cvv = CardUtils.getRandomNumberCvv(0,999);
-
-        Client clientRegistered = new Client(firstName, lastName, email, passwordEncoder.encode(password));
-        clientRegistered.addAccount(account);
-
-        clientService.saveClient(clientRegistered);
-        accountRepository.save(account);
-
+        clientService.saveClient(new Client(firstName, lastName, email, passwordEncoder.encode(password)));
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

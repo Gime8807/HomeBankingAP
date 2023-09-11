@@ -53,7 +53,7 @@ public class TransactionController {
         Account accountDestination = accountService.findByNumber(toAccountNumber);
 
         //Verificar que los parámetros no estén vacíos
-        if (amount == null) {
+        if (amount <=0) {
             return new ResponseEntity<>("Missing Data, amount is required", HttpStatus.FORBIDDEN);
         }
         if (description.isBlank()) {
@@ -68,11 +68,11 @@ public class TransactionController {
         // Verificar que los números de cuenta no sean iguales
 
         if (fromAccountNumber.equals(toAccountNumber)) {
-            return new ResponseEntity<>("You are not allowed to perform this operation", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("This operation is prohibited", HttpStatus.FORBIDDEN);
         }
         //Verificar que exista la cuenta de origen
 
-        if (!accountService.existsByNumber(fromAccountNumber)) {
+        if (!clientAuth.getAccounts().contains(fromAccountNumber)) {
             return new ResponseEntity<>("Source account don't exists", HttpStatus.FORBIDDEN);
         }
         //Verificar que la cuenta de origen pertenezca al cliente autenticado

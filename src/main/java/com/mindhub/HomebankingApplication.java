@@ -29,7 +29,7 @@ public class HomebankingApplication {
 
 			//--CLIENTS--//
 
-			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com",
+			/*Client client1 = new Client("Melba", "Morel", "melba@mindhub.com",
 					passwordEncoder.encode("ads12345"));
 			Client client2 = new Client("Gimena","Sasso","gimesasso@gmail.com",
 					passwordEncoder.encode("bvc12345"));
@@ -136,7 +136,7 @@ public class HomebankingApplication {
 			client2.addCard(card3);
 			cardRepository.save(card1);
 			cardRepository.save(card2);
-			cardRepository.save(card3);
+			cardRepository.save(card3);*/
 
 		};
 	}

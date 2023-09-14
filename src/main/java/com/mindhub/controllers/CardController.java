@@ -35,12 +35,12 @@ public class CardController {
     private ClientService clientService;
 
 
-    @RequestMapping("/cards")
+    @GetMapping("/cards")
     public List<CardDTO> getCards(){
         return cardService.getCards();
     }
 
-    @RequestMapping (value = "/clients/current/cards",method = RequestMethod.POST)
+    @PostMapping ("/clients/current/cards")
     public  ResponseEntity<Object> createdCard (@RequestParam CardType cardType,@RequestParam CardColor cardColor,
     Authentication authentication){
         Client client = clientService.getCurrentClient(authentication.getName());

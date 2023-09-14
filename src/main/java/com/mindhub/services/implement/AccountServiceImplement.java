@@ -47,12 +47,6 @@ public class AccountServiceImplement implements AccountService {
 
 
     @Override
-    public List<AccountDTO> getCurrentAccount(Authentication authentication) {
-        return clientRepository.findByEmail(authentication.getName()).getAccounts().stream().
-                map(AccountDTO::new).collect(Collectors.toList());
-    }
-
-    @Override
     public void createdAccount(Account account) {
         accountRepository.save(account);
     }

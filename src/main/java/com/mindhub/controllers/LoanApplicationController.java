@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -37,13 +34,13 @@ public class LoanApplicationController {
     private ClientLoanRepository clientLoanRepository;
 
 
-    @RequestMapping(value = "/loans", method = RequestMethod.GET)
+    @GetMapping("/loans")
     public List<LoanDTO> getLoans(){
         return loanService.getLoans();
     }
 
     @Transactional
-    @RequestMapping (value = "/loans",method = RequestMethod.POST)
+    @PostMapping("/loans")
     ResponseEntity <Object> createdLoans (@RequestBody LoanApplicationDTO loanApplicationDTO,
                                       Authentication authentication){
 
@@ -71,20 +68,20 @@ public class LoanApplicationController {
         }
 
         //Verificar que el préstamo exista
-        if (!loanService.existsById(loanId)) {
+        if (loan==null) {
             return new ResponseEntity<>("This Loan don't exists",HttpStatus.FORBIDDEN);
         }
         //Verificar que el monto solicitado no exceda el monto máximo del préstamo
-        if(amount > loanService.getLoanById(loanId).getMaxAmount()){
+        if(amount > loan.getMaxAmount()){
             return new ResponseEntity<>("This amount is greater than what is allowed ",HttpStatus.FORBIDDEN);
         }
         //Verifica que la cantidad de cuotas se encuentre entre las disponibles del préstamo
-        if(loan.getPayments().equals(loanApplicationDTO.getPayments())){
+        if(loan.getPayments().contains(loanApplicationDTO.getPayments())){
             return new ResponseEntity<>("This numbers of payments is not available",HttpStatus.FORBIDDEN);
         }
 
         //Verificar que la cuenta de destino exista
-        if(!accountService.existsByNumber(toAccountNumber)){
+        if(accountDestination==null){
             return new ResponseEntity<>("This destination account don't exists", HttpStatus.FORBIDDEN);
         }
         //Verificar que la cuenta de destino pertenezca al cliente autenticado

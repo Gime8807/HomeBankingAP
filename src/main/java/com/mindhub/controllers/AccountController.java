@@ -13,13 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.mindhub.utils.AccountUtils.getRandomNumberAccount;
@@ -35,7 +33,7 @@ public class AccountController {
     private AccountService accountService;
 
     //Servlet
-    @RequestMapping("/accounts")
+    @GetMapping("/accounts")
     public List<AccountDTO> getAccounts() {
         return accountService.getAccounts();
 
@@ -46,18 +44,19 @@ public class AccountController {
         return listAccountDTO;*/
     }
 
-    @RequestMapping("/accounts/{id}")
+    @GetMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable Long id){
         return  new AccountDTO(accountService.getAccountById(id));
     }
 
-    @RequestMapping ("/clients/current/accounts")
-    public List<AccountDTO> getCurrentAccount (Authentication authentication){
-        return accountService.getCurrentAccount(authentication);
+    @GetMapping ("/clients/current/accounts")
+    public Set<AccountDTO> getCurrentAccount (Authentication authentication){
+        Client clientAuth = clientService.getCurrentClient(authentication.getName());
+        return clientAuth.getAccounts().stream().map(AccountDTO::new).collect(Collectors.toSet());
     }
 
 
-    @RequestMapping(value = "/clients/current/accounts", method = RequestMethod.POST)
+    @PostMapping("/clients/current/accounts")
 
     public ResponseEntity<Object> createdAccount (Authentication authentication){
             /*Client clientAuth =  clientRepository.findByEmail(authentication.getName());*/

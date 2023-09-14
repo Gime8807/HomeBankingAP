@@ -32,17 +32,17 @@ public class TransactionController {
     @Autowired
     private AccountService accountService;
 
-    @RequestMapping("/transactions")
+    @GetMapping("/transactions")
     public List<TransactionDTO> getTransactions(){
         return transactionService.getTransactions();
     }
-    @RequestMapping("/transactions/{id}")
+    @GetMapping("/transactions/{id}")
     public TransactionDTO getTransactions (@PathVariable Long id){
         return new TransactionDTO(transactionService.getTransactionById(id));
     }
 
     @Transactional
-    @RequestMapping (value = "/transactions",method = RequestMethod.POST)
+    @PostMapping ("/transactions")
     public ResponseEntity<Object> createdTransaction (
             @RequestParam Double amount, @RequestParam String description,
             @RequestParam String fromAccountNumber ,@RequestParam String toAccountNumber,

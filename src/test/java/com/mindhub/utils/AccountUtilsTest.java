@@ -18,4 +18,6 @@ class AccountUtilsTest {
         int accountNumber = AccountUtils.getRandomNumberAccount(10000000,99999999);
         assertThat(accountNumber,is(not(nullValue())));
     }
+
+
 }

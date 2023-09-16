@@ -22,4 +22,10 @@ class CardUtilsTest {
       String numberCard = CardUtils.getRandomNumberCard();
       assertThat(numberCard,is(not(emptyOrNullString())));
     }
+
+    @Test
+    public void cvvNumberIsCreated(){
+        int cvv = CardUtils.getRandomNumberCvv(0,999);
+        assertThat(cvv,is(not(nullValue())));
+    }
 }

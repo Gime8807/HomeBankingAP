@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ public class HomebankingApplication {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository,
 									  TransactionRepository transactionRepository, LoanRepository loanRepository,
 									  ClientLoanRepository clientLoanRepository,CardRepository cardRepository){
@@ -30,7 +30,7 @@ public class HomebankingApplication {
 
 			//--CLIENTS--//
 
-			/*Client client1 = new Client("Melba", "Morel", "melba@mindhub.com",
+			Client client1 = new Client("Melba", "Morel", "melba@mindhub.com",
 					passwordEncoder.encode("ads12345"));
 			Client client2 = new Client("Gimena","Sasso","gimesasso@gmail.com",
 					passwordEncoder.encode("bvc12345"));
@@ -137,7 +137,7 @@ public class HomebankingApplication {
 			client2.addCard(card3);
 			cardRepository.save(card1);
 			cardRepository.save(card2);
-			cardRepository.save(card3);*/
+			cardRepository.save(card3);
 		};
-	}
+	}*/
 }

@@ -2,7 +2,6 @@ package com.mindhub.repositories;
 
 
 import com.mindhub.models.Loan;
-import com.mindhub.repositories.LoanRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -14,8 +13,7 @@ import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-
-public class RepositoriesTest {
+public class LoanRepositoriesTest {
         @Autowired
         LoanRepository loanRepository;
 
@@ -30,10 +28,21 @@ public class RepositoriesTest {
 
         @Test
         public void existPersonalLoan(){
+            List<Loan> loans = loanRepository.findAll();
+            assertThat(loans, hasItem(hasProperty("name", is("PERSONAL LOAN"))));
+        }
+
+        @Test
+        public void existMortgageLoan(){
 
             List<Loan> loans = loanRepository.findAll();
+            assertThat(loans, hasItem(hasProperty("name", is("MORTGAGE LOAN"))));
+        }
+        @Test
+        public void existCardLoan(){
 
-            assertThat(loans, hasItem(hasProperty("name", is("PERSONAL LOAN"))));
+            List<Loan> loans = loanRepository.findAll();
+            assertThat(loans, hasItem(hasProperty("name", is("CARD LOAN"))));
         }
 
 }

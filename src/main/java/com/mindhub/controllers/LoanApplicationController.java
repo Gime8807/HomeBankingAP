@@ -76,7 +76,7 @@ public class LoanApplicationController {
             return new ResponseEntity<>("This amount is greater than what is allowed ",HttpStatus.FORBIDDEN);
         }
         //Verifica que la cantidad de cuotas se encuentre entre las disponibles del préstamo
-        if(loan.getPayments().contains(loanApplicationDTO.getPayments())){
+        if(loan.getPayments().equals(loanApplicationDTO.getPayments())){
             return new ResponseEntity<>("This numbers of payments is not available",HttpStatus.FORBIDDEN);
         }
 
